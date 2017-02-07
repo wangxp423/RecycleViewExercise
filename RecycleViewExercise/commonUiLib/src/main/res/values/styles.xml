@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="ThemeAppBase.Light" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme" parent="ThemeAppBase.Light">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>

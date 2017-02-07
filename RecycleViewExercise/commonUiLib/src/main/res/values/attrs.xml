@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<declare-styleable name="PullContainerView">
+		<attr name="enable" format="boolean" />
+		<attr name="headerView" format="reference" />
+		<attr name="footerView" format="reference" />
+		<attr name="headerSuggestedHeight" format="dimension" />
+		<attr name="footerSuggestedHeight" format="dimension" />
+		<attr name="mainView" format="reference" />
+		<attr name="coupleView" format="reference" />
+	</declare-styleable>
+
+	<declare-styleable name="StackSlideView">
+		<attr name="leftMargin" format="dimension" />
+		<attr name="extraWidth" format="dimension" />
+		<attr name="childCrossWidth" format="dimension" />
+	</declare-styleable>
+
+	<declare-styleable name="AddressBookView">
+		<attr name="listView" format="reference" />
+		<attr name="labelView" format="reference" />
+		<attr name="shortcutView" format="reference" />
+		<attr name="shortcutEnable" format="boolean" />
+		<attr name="shortcutLayoutMarginTop" format="dimension" />
+		<attr name="shortcutLayoutMarginBottom" format="dimension" />
+		<attr name="shortcutLayoutMarginRight" format="dimension" />
+		<attr name="shortcutItemLayout" format="reference" />
+		<attr name="shortcutItemLabelViewId" format="reference" />
+	</declare-styleable>
+
+</resources>
