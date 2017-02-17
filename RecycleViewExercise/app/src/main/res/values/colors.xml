@@ -3,4 +3,44 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- 2.1 -->
+    <color name="cont_a">#1A1919</color>
+    <color name="cont_b">#4D4B4B</color>
+    <color name="cont_c">#807E7D</color>
+    <color name="cont_d">#B3B0AF</color>
+    <color name="cont_e">#FFFFFF</color>
+    <color name="cont_f">#FFFFFF</color>
+    <color name="cont_g">#FF7733</color>
+    <color name="cont_h">#FF9933</color>
+    <color name="cont_i">#1a1919</color>
+    <color name="toast_balance_tx">#FF661A</color>
+    <color name="link_tip_a">#5F98FA</color>
+    <color name="cont_hint">#b2b0af</color>
+    <color name="cont_blue">#3e83fa</color>
+    <!-- 2.1 -->
+    <color name="bg_line_a">#CCCCCC</color>
+    <color name="bg_line_b">#E6E6E6</color>
+    <color name="bg_line_c">#F0F0F0</color>
+    <color name="bg_line_d">#F5F5F5</color>
+    <color name="bg_line_e">#FAFAFA</color>
+    <color name="bg_line_f">#FFFFFF</color>
+    <!-- 2.0 -->
+    <color name="bg_a">#CBCBCB</color>
+    <color name="bg_b">#F6F6F6</color>
+    <color name="bg_c">#F0F0F0</color>
+    <color name="bg_d">#FFFFFF</color>
+    <color name="line_a">#D2D2D2</color>
+    <color name="line_b">#D8D8D8</color>
+    <color name="line_z">#CCCBCA</color>
+    <!-- dialog -->
+    <color name="line_d">#E6E4E3</color>
+    <!-- 2.1 -->
+    <color name="other_a">#FF8C1A</color>
+    <color name="other_b">#38CFD9</color>
+    <color name="other_c">#FFC324</color>
+    <color name="other_d">#43BAFF</color>
+    <color name="other_e">#13C083</color>
+    <color name="other_f">#FF454E</color>
+    <color name="other_g">#b2b0af</color>
 </resources>

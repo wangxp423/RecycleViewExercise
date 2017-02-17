@@ -1,13 +1,36 @@
 package com.wangxp.exercise.recycleview;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.wangxp.exercise.recycleview.activity.StaggerTypeActivity;
+
+public class MainActivity extends BaseNormalActivity implements View.OnClickListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getContentLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initView() {
+        findViewById(R.id.bt_type_taggertype).setOnClickListener(this);
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_type_taggertype:
+                startActivity(new Intent(this, StaggerTypeActivity.class));
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#F5F3F2"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/pull_anim_image"
+        android:layout_width="39dp"
+        android:layout_height="31dp"
+        android:scaleType="centerInside"/>
+
+</LinearLayout>

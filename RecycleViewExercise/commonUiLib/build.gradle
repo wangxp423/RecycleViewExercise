@@ -2,12 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "21.1.2"
-
-    defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 21
-    }
+    buildToolsVersion "24.0.3"
 
     buildTypes {
         release {
@@ -18,5 +13,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.0.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:19.1.0'
 }

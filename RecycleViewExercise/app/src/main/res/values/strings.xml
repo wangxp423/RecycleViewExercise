@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">RecycleViewExercise</string>
+    <string name="key_viewmodel_object">tag_object</string>
+    <string name="notice_car_over">行程已结束,无法设置提醒</string>
+    <string name="notice_car_start">行程已开始,无法设置提醒</string>
+    <string name="notice_hot_city">热门目的地</string>
+    <string name="notice_search_more_hot_city">搜索更多热门目的地</string>
+    <string name="notice_arrive_city">目的地</string>
+    <string name="notice_cur_city">当前城市</string>
+    <string name="notice_arrive_detail">详情</string>
+    <string name="notice_route_jingdian">必去景点</string>
+    <string name="notice_route_jingdian_comment">人点评</string>
+    <string name="notice_route_gonglve_enjoy">人体验过</string>
+    <string name="notice_route_gonglve">精彩攻略</string>
+    <string name="notice_route_local">周边游推荐</string>
+    <string name="notice_route_history">历史足迹</string>
+    <string name="notice_route_hotel">住宿推荐</string>
+    <string name="notice_route_food">美食推荐</string>
+    <string name="notice_other_city">其他城市</string>
+    <string name="notice_other_gonglve_canot_dismiss">不可错过的五大景点路线推荐</string>
 </resources>

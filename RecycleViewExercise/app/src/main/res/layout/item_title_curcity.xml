@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+    <TextView
+        android:id="@+id/arrive_city_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:drawableLeft="@drawable/icon_recommend_hot_city"
+        android:drawablePadding="5dp"
+        android:gravity="left|center"
+        android:paddingLeft="5dp"
+        android:text="@string/notice_arrive_city"
+        android:textColor="@color/cont_a"
+        android:textSize="@dimen/text_size_middle" />
+
+    <TextView
+        android:id="@+id/arrive_city_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="10dp"
+        android:gravity="left"
+        android:paddingLeft="5dp"
+        android:text="@string/notice_arrive_detail"
+        android:textColor="@color/cont_g"
+        android:textSize="@dimen/text_size_small" />
+
+</FrameLayout>
