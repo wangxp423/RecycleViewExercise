@@ -12,8 +12,9 @@ public class BaseFloorEntity {
     public static final int TYPE_RECOMMEND_HOTEL = 3;   // 住宿推荐
     public static final int TYPE_RECOMMEND_GONGLVE = 4; // 精彩攻略
     public static final int TYPE_RECOMMEND_AROUND = 5; // 周边游推荐
-    public static final int TYPE_TITLE_CURCITY = 6;
-    public static final int TYPE_TITLE_RECOMMEND = 7;
+    public static final int TYPE_TITLE_CURCITY = 6; //当前城市标题
+    public static final int TYPE_TITLE_RECOMMEND = 7; //分类标题标题
+    public static final int TYPE_TEST_FOOD = 8; //三列图片布局
 
     int type;
     int index;

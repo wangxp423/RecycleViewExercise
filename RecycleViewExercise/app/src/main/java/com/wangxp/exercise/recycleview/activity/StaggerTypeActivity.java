@@ -14,6 +14,7 @@ import com.wangxp.exercise.recycleview.viewmodel.entity.ItemCurCity;
 import com.wangxp.exercise.recycleview.viewmodel.entity.ItemDianpingCity;
 import com.wangxp.exercise.recycleview.viewmodel.entity.ItemHotelCity;
 import com.wangxp.exercise.recycleview.viewmodel.entity.ItemMeishiCity;
+import com.wangxp.exercise.recycleview.viewmodel.entity.ItemMeishiColumn;
 import com.wangxp.exercise.recycleview.viewmodel.entity.ItemTitleCategory;
 import com.wangxp.exercise.recycleview.viewmodel.entity.ItemTitleCurCity;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteAroundModel;
@@ -21,11 +22,13 @@ import com.wangxp.exercise.recycleview.viewmodel.model.RouteCurCityModel;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteGonglveModel;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteHotelModel;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteJingdianModel;
+import com.wangxp.exercise.recycleview.viewmodel.model.RouteMeishiColumnModel;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteMeishiModel;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteTitleCategoryModel;
 import com.wangxp.exercise.recycleview.viewmodel.model.RouteTitleCurCityModel;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_CUR_CITY;
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_RECOMMEND_AROUND;
@@ -33,6 +36,7 @@ import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.T
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_RECOMMEND_GONGLVE;
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_RECOMMEND_HOTEL;
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_RECOMMEND_JINGDIAN;
+import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_TEST_FOOD;
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_TITLE_CURCITY;
 import static com.wangxp.exercise.recycleview.viewmodel.entity.BaseFloorEntity.TYPE_TITLE_RECOMMEND;
 
@@ -75,6 +79,8 @@ public class StaggerTypeActivity extends BaseNormalActivity {
                     return 6;
                 } else if (type == TYPE_TITLE_RECOMMEND) {
                     return 6;
+                } else if (type == TYPE_TEST_FOOD) {
+                    return 6;
                 } else {
                     return 6;
                 }
@@ -91,6 +97,7 @@ public class StaggerTypeActivity extends BaseNormalActivity {
     protected void initData() {
         initArriveCityData();
         initCityMeishiData();
+        initCityMeishiColumnData();
 //        initCityHotelData();
         initDianpingData();
 //        StaggerAdapter adapter = new StaggerAdapter(data);
@@ -104,6 +111,7 @@ public class StaggerTypeActivity extends BaseNormalActivity {
         adapter.addViewModelClass(BaseFloorEntity.TYPE_RECOMMEND_AROUND, RouteAroundModel.class);
         adapter.addViewModelClass(BaseFloorEntity.TYPE_TITLE_CURCITY, RouteTitleCurCityModel.class);
         adapter.addViewModelClass(BaseFloorEntity.TYPE_TITLE_RECOMMEND, RouteTitleCategoryModel.class);
+        adapter.addViewModelClass(BaseFloorEntity.TYPE_TEST_FOOD, RouteMeishiColumnModel.class);
         mRecyclerView.setAdapter(adapter);
         adapter.setList(data);
     }
@@ -174,6 +182,28 @@ public class StaggerTypeActivity extends BaseNormalActivity {
         for (ItemDianpingCity.ItemAround around : aroundList) {
             around.setFloorType(TYPE_RECOMMEND_AROUND);
             data.add(around);
+        }
+    }
+
+    //三列样式的美食
+    private void initCityMeishiColumnData() {
+        final int COLUMN = 3;
+        ItemTitleCategory categoryTitle = new ItemTitleCategory();
+        categoryTitle.setTitle("美食推荐");
+        data.add(categoryTitle);
+        String meishiData = AssetsUtil.getFromAssets(this, "meishiCity.json");
+        ItemMeishiCity meishiCity = new Gson().fromJson(meishiData, ItemMeishiCity.class);
+        ArrayList<ItemMeishiCity.ItemMeishi> meishiList = meishiCity.getList();
+        int line = meishiList.size()/COLUMN;
+        for (int i = 0; i < line; i++) {
+            ItemMeishiColumn meishiColumn = new ItemMeishiColumn();
+            meishiColumn.setFloorType(TYPE_TEST_FOOD);
+            ArrayList<ItemMeishiCity.ItemMeishi> columnList = new ArrayList<ItemMeishiCity.ItemMeishi>();
+            for (int j = 0; j < COLUMN; j++) {
+                columnList.add(meishiList.get(i*COLUMN + j));
+            }
+            meishiColumn.setColumnList(columnList);
+            data.add(meishiColumn);
         }
     }
 }
