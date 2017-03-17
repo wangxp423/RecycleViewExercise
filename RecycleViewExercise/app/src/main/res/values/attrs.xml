@@ -7,7 +7,5 @@
 		<attr name="footerView" format="reference" />
 		<attr name="headerSuggestedHeight" format="dimension" />
 		<attr name="footerSuggestedHeight" format="dimension" />
-		<attr name="mainView" format="reference" />
-		<attr name="coupleView" format="reference" />
 	</declare-styleable>
 </resources>

@@ -10,4 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="复杂样式类型布局" />
+    <Button
+        android:id="@+id/bt_composite_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="复合布局RecyclerView" />
+    <Button
+        android:id="@+id/bt_pull_recyclerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RecyclerView下拉刷新" />
 </LinearLayout>

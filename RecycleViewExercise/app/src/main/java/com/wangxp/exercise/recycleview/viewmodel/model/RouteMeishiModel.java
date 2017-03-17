@@ -30,6 +30,8 @@ public class RouteMeishiModel implements IViewModel<ItemMeishiCity.ItemMeishi>, 
         mContext = parent.getContext();
 //        view.setTag(holder);
 //        view.setOnClickListener(this); //整体View添加点击事件
+//        holder.meishiImg.setTag(holder);
+//        holder.meishiImg.setOnClickListener(this);
         return holder;
     }
 
@@ -40,8 +42,8 @@ public class RouteMeishiModel implements IViewModel<ItemMeishiCity.ItemMeishi>, 
         final Context context = meishiViewHolder.mContext;
         ImageLoader.loadUrlImage(context, model.getImg_url(), meishiViewHolder.meishiImg, context.getResources().getDrawable(R.drawable.zhanwei_224_224));
         meishiViewHolder.meishiName.setText(model.getShopname());
-        meishiViewHolder.meishiImg.setOnClickListener(this);
-        meishiViewHolder.meishiImg.setTag(meishiViewHolder);
+//        meishiViewHolder.meishiImg.setOnClickListener(this);
+//        meishiViewHolder.meishiImg.setTag(meishiViewHolder);
     }
 
     @Override

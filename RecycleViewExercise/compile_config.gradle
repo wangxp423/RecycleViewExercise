@@ -1,0 +1,22 @@
+ext {
+    android = [
+            compileSdkVersion: 23,
+            buildToolsVersion: "25",
+            minSdkVersion    : 14,
+            targetSdkVersion : 22
+    ]
+
+    def supportVersion = "23.4.0"
+    def gsonVesion = "2.4"
+    def butterKnifeVersion = "8.4.0"
+    def butterKnifeCompilerVersion = "8.4.0"
+
+    libSupportAppcompatV7 = "com.android.support:appcompat-v7:${supportVersion}"
+    libSupportDesign = "com.android.support:design:${supportVersion}"
+    libSupportRecyclerview = "com.android.support:recyclerview-v7:${supportVersion}"
+    libSupportV4 = "com.android.support:support-v4:${supportVersion}"
+    libGson = "com.google.code.gson:gson:${gsonVesion}"
+    libButterKnife = "com.jakewharton:butterknife:${butterKnifeVersion}"
+    libButterKnifeCompiler = "com.jakewharton:butterknife-compiler:${butterKnifeCompilerVersion}"
+
+}

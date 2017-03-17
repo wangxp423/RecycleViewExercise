@@ -1,1 +1,1 @@
-include ':app', ':MasterCommonLib', ':commonUiLib'
+include ':app', ':MasterCommonLib', ':commonUiLib', ':xrecyclerview', ':foundationlibary'

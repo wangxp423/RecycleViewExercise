@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xheader="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/re"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xheader:enable="true"
+        xheader:headerSuggestedHeight="@dimen/pull_header_suggested_height_bird"
+        xheader:headerView="@layout/listview_header"/>
+
+</LinearLayout>

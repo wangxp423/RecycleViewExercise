@@ -30,4 +30,6 @@ dependencies {
     compile project(':MasterCommonLib')
     compile project(':commonUiLib')
     compile 'com.google.code.gson:gson:2.8.0'
+    compile project(':xrecyclerview')
+    compile project(':foundationlibary')
 }
