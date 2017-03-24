@@ -20,4 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RecyclerView下拉刷新" />
+    <Button
+        android:id="@+id/bt_statuslist_drawable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试StatusListDrawable" />
 </LinearLayout>

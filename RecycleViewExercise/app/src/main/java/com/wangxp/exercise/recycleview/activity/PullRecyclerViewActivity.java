@@ -4,9 +4,11 @@ import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.iwangfan.foundationlibary.utils.ToastUtils;
 import com.jcodecraeer.xrecyclerview.BaseRefreshHeader;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.wangxp.exercise.recycleview.BaseNormalActivity;
@@ -51,7 +53,7 @@ public class PullRecyclerViewActivity extends BaseNormalActivity{
                 re.loadMoreComplete();
             }
         });
-        NormalHeaderCallBack callBack = new NormalHeaderCallBack();
+        NormalHeaderCallBack callBack = new NormalHeaderCallBack(this);
         callBack.setmTipText("航美引擎提供，更新10条数据");
         re.setHeaderViewCallBack(callBack);
     }
@@ -70,9 +72,15 @@ public class PullRecyclerViewActivity extends BaseNormalActivity{
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             TextView tv = (TextView) holder.itemView.findViewById(android.R.id.text1);
             tv.setText(String.valueOf(position));
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastUtils.showShortToast("item = " + position);
+                }
+            });
 //            holder.itemView.setBackgroundColor(Color.BLUE);
         }
 

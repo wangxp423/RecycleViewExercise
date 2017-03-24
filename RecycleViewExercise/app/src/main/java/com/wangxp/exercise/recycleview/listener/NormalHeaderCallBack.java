@@ -3,9 +3,10 @@ package com.wangxp.exercise.recycleview.listener;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.ImageView;
@@ -28,9 +29,42 @@ import com.wangxp.exercise.recycleview.R;
 
 public class NormalHeaderCallBack implements XRecyclerView.HeaderAndFooterViewCallback{
     private String mTipText;
+    StateListDrawable mPullingDrawable;
+    public NormalHeaderCallBack(Context context){
+        StateListDrawable drawable = mPullingDrawable = new StateListDrawable();
+        for (int i = DRAWABLE_PULL.length - 1; i >= 0; i--) {
+            final int resid = DRAWABLE_PULL[i];
+            drawable.addState(new int[]{i}, context.getResources().getDrawable(resid));
+        }
+    }
+
+    private final int[] DRAWABLE_PULL = {
+            R.drawable.refresh_pulling_bird_logo_01, R.drawable.refresh_pulling_bird_logo_02, R.drawable.refresh_pulling_bird_logo_03,
+            R.drawable.refresh_pulling_bird_logo_04, R.drawable.refresh_pulling_bird_logo_05, R.drawable.refresh_pulling_bird_logo_06,
+            R.drawable.refresh_pulling_bird_logo_07, R.drawable.refresh_pulling_bird_logo_08, R.drawable.refresh_pulling_bird_logo_09,
+            R.drawable.refresh_pulling_bird_logo_10, R.drawable.refresh_pulling_bird_logo_11, R.drawable.refresh_pulling_bird_logo_12,
+            R.drawable.refresh_pulling_bird_logo_13, R.drawable.refresh_pulling_bird_logo_14, R.drawable.refresh_pulling_bird_logo_15,
+            R.drawable.refresh_pulling_bird_logo_16, R.drawable.refresh_pulling_bird_logo_17, R.drawable.refresh_pulling_bird_logo_18,
+            R.drawable.refresh_pulling_bird_logo_19, R.drawable.refresh_pulling_bird_logo_20, R.drawable.refresh_pulling_bird_logo_21,
+            R.drawable.refresh_pulling_bird_logo_22, R.drawable.refresh_pulling_bird_logo_23, R.drawable.refresh_pulling_bird_logo_24,
+            R.drawable.refresh_pulling_bird_logo_25, R.drawable.refresh_pulling_bird_logo_26, R.drawable.refresh_pulling_bird_logo_27,
+    };
     @Override
     public void onHeightChanged(ArrowRefreshHeader header, int height, int state) {
-//        Log.d("Test","onHeightChanged.view="  + header.getHeaderView()  +  "  height = " + height + "   state = " + state);
+////        Log.d("Test","onHeightChanged.visibileHeight = "+header.getVisibleHeight() + "  height = " + height + "   state = " + state);
+//        ImageView pulling = (ImageView )header.getHeaderView().findViewById(R.id.listview_header_arrow);
+//        final int keep = 120 / 2;
+//        final int minHeight = 120 + keep;
+//        int index = 0;
+//        if (height <= keep) {
+////            Log.d("Test","height <= keep = " + index);
+//        } else {
+//            index = (height - keep) * DRAWABLE_PULL.length / (minHeight - keep);
+//            if (index >= DRAWABLE_PULL.length) index = DRAWABLE_PULL.length - 1;
+//            Log.d("Test","else = " + index);
+//        }
+//        mPullingDrawable.setState(new int[]{index});
+//        pulling.invalidate();
     }
 
     @Override
@@ -42,16 +76,6 @@ public class NormalHeaderCallBack implements XRecyclerView.HeaderAndFooterViewCa
         if (null == imageView) imageView = (ImageView) header.getHeaderView().findViewById(R.id.listview_header_arrow);
         switch (newState){
             case BaseRefreshHeader.PULL_STATE_NONE:
-//                final TextView finalTipView = tipView;
-//                final ImageView finalImageView = imageView;
-//                imageView.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        finalTipView.setBackgroundColor(0);
-//                        finalTipView.setText("");
-//                        finalImageView.setImageDrawable(header.getHeaderView().getContext().getResources().getDrawable(R.drawable.refresh_loading_01));
-//                    }
-//                },300);
                 header.smoothScrollTo(0);
                 break;
             case BaseRefreshHeader.PULL_STATE_NORMAL:
@@ -60,25 +84,29 @@ public class NormalHeaderCallBack implements XRecyclerView.HeaderAndFooterViewCa
             case BaseRefreshHeader.PULL_STATE_PULLING:
                 tipView.setBackgroundColor(0);
                 tipView.setText("");
+//                imageView.setImageDrawable(mPullingDrawable);
                 imageView.setImageDrawable(header.getHeaderView().getContext().getResources().getDrawable(R.drawable.refresh_loading_01));
                 break;
             case BaseRefreshHeader.PULL_STATE_ENABLE:
-//                setAnimation(imageView);
-//                header.smoothScrollTo(120);
+                setAnimation(imageView);
                 break;
             case BaseRefreshHeader.PULL_STATE_LOADING:
                 setAnimation(imageView);
                 header.smoothScrollTo(120);
                 break;
             case BaseRefreshHeader.PULL_STATE_FINISH:
-                setTipAnim(tipView,imageView);
-                header.smoothScrollTo(70);
-                imageView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        header.setState(BaseRefreshHeader.PULL_STATE_NONE);
-                    }
-                },1500);
+                if (oldState == BaseRefreshHeader.PULL_STATE_LOADING){
+                    setTipAnim(tipView,imageView);
+                    header.smoothScrollTo(70);
+                    header.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            header.setState(BaseRefreshHeader.PULL_STATE_NONE);
+                        }
+                    },1500);
+                } else {
+                    header.setState(BaseRefreshHeader.PULL_STATE_NONE);
+                }
                 break;
             default:
                 break;

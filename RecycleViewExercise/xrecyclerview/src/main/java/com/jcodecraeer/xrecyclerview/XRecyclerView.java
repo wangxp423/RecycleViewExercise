@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,7 +31,6 @@ public class XRecyclerView extends RecyclerView {
     private int mLoadingMoreProgressStyle = ProgressStyle.SysProgress;
     private ArrayList<View> mHeaderViews = new ArrayList<>();
     private WrapAdapter mWrapAdapter;
-    private float mLastY = -1;
     private static final float DRAG_RATE = 2.5f;
     private LoadingListener mLoadingListener;
     private HeaderAndFooterViewCallback mHeaderCallBack;
@@ -68,23 +68,23 @@ public class XRecyclerView extends RecyclerView {
     //初始化自定义属性(header and footer)
     private void initAttrs(Context context,AttributeSet attrs){
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PullContainerView);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.XHeaderView);
             final int N = typedArray.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = typedArray.getIndex(i);
-                if (attr == R.styleable.PullContainerView_enable) {
+                if (attr == R.styleable.XHeaderView_enable) {
                     boolean enable = typedArray.getBoolean(attr, true);
                     pullRefreshEnabled = enable;
 //                    setEnabled(enable);
-                } else if (attr == R.styleable.PullContainerView_headerSuggestedHeight) {
+                } else if (attr == R.styleable.XHeaderView_headerSuggestedHeight) {
                     mHeaderSuggestedHeight = typedArray.getDimensionPixelSize(attr, 0);
-                } else if (attr == R.styleable.PullContainerView_footerSuggestedHeight) {
+                } else if (attr == R.styleable.XHeaderView_footerSuggestedHeight) {
                     mFooterSuggestedHeight = typedArray.getDimensionPixelSize(attr, 0);
-                } else if (attr == R.styleable.PullContainerView_headerView) {
+                } else if (attr == R.styleable.XHeaderView_headerView) {
                     final int viewLayout = typedArray.getResourceId(attr, View.NO_ID);
                     if (viewLayout != View.NO_ID)
                         mHeaderView = View.inflate(context,viewLayout,null);
-                } else if (attr == R.styleable.PullContainerView_footerView) {
+                } else if (attr == R.styleable.XHeaderView_footerView) {
                     final int viewLayout = typedArray.getResourceId(attr, View.NO_ID);
                     if (viewLayout != View.NO_ID)
                         mFooterView = View.inflate(context,viewLayout,null);
@@ -300,30 +300,40 @@ public class XRecyclerView extends RecyclerView {
         }
     }
 
+    private float downY,moveY;
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (!pullRefreshEnabled) return super.dispatchTouchEvent(ev);
-        if (mLastY == -1) {
-            mLastY = ev.getRawY();
-        }
+//        if (mLastY == -1) {
+//            mLastY = ev.getRawY();
+//        }
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mLastY = ev.getRawY();
+                downY = ev.getRawY();
                 if (mRefreshHeader.getState() == BaseRefreshHeader.PULL_STATE_NONE){
                     mRefreshHeader.setState(BaseRefreshHeader.PULL_STATE_NORMAL);
+                    if (mRefreshHeader.getVisibleHeight() > 0) mRefreshHeader.setVisibleHeight(-1);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mRefreshHeader.getState() > BaseRefreshHeader.PULL_STATE_ENABLE) return true;
-                final float deltaY = ev.getRawY() - mLastY;
-                mLastY = ev.getRawY();
-                if (isOnTop() && pullRefreshEnabled && appbarState == AppBarStateChangeListener.State.EXPANDED) {
-                    mRefreshHeader.onMove(deltaY / DRAG_RATE);
+                if (mRefreshHeader.getState() == BaseRefreshHeader.PULL_STATE_LOADING) return true;
+                float py = ev.getRawY();
+                moveY = py - downY;
+//                downY = ev.getRawY();
+                Log.e("Test","moveY = " + moveY + "   height = " + mRefreshHeader.getVisibleHeight());
+                if (isOnTop()) {
+                    if(pullRefreshEnabled && appbarState == AppBarStateChangeListener.State.EXPANDED){
+                        mRefreshHeader.onMove(moveY / DRAG_RATE);
+                        if (mRefreshHeader.getVisibleHeight() > 0 && mRefreshHeader.getState() < ArrowRefreshHeader.PULL_STATE_LOADING) {
+                            return false;
+                        }
+                    }
                 }
                 break;
-            case MotionEvent.ACTION_CANCEL:
+//            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                mLastY = -1; // reset
+//                mLastY = -1; // reset
+                downY = ev.getRawY();
                 if (isOnTop() && pullRefreshEnabled && appbarState == AppBarStateChangeListener.State.EXPANDED) {
                     if (mRefreshHeader.releaseAction()) {
                         if (mLoadingListener != null) {

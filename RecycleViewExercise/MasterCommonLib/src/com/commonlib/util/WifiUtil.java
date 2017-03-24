@@ -1,5 +1,9 @@
 package com.commonlib.util;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +16,8 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * 
@@ -50,6 +56,42 @@ public class WifiUtil {
 		return wifiInfo;
 	}
 
+	public static int getLinkDeviceNum(){
+		int count = 0;
+		StringBuilder builder = new StringBuilder();
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("/proc/net/arp"));
+			String line = reader.readLine();
+			//读取第一行信息，就是IP address HW type Flags HW address Mask Device
+			while ((line = reader.readLine()) != null) {
+				String[] tokens = line.split("[ ]+");
+				if (tokens.length < 6) {
+					continue;
+				}
+				String ip = tokens[0]; //ip
+				String mac = tokens[3];  //mac 地址
+				String flag = tokens[2];//表示连接状态 "0x0"应该是未连接，mac为0  "0x2"连接mac正确
+				if (!TextUtils.isEmpty(flag) && flag.equals("0x2")){
+					builder.append("count = " + count++).append("   mac = " + mac).append("\n");
+				}
+			}
+			Log.d("Test",builder.toString());
+			return count;
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			}
+			catch (IOException e) {
+			}
+		}
+		return count;
+	}
+
 	/**
 	 * 获取mac地址
 	 * 
@@ -62,7 +104,7 @@ public class WifiUtil {
 	}
 	
 	/**
-	 * 获取mac地址
+	 * 获取ssid地址
 	 * 
 	 * @param context
 	 * @return
@@ -75,7 +117,7 @@ public class WifiUtil {
 	/**
 	 * 是否是往返wifi
 	 * 
-	 * @param context
+	 * @param ssid
 	 * @return
 	 */
 	private static boolean isWangfanWifi(String ssid) {

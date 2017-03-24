@@ -83,8 +83,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     @Override
     public void onMove(float delta) {
 //        Log.d("Test", "onMove.delta = " + delta + "  getVisibleHeight = " + getVisibleHeight() + "  state = " + getState());
-        if (getVisibleHeight() > 0 || delta > 0) {
-            setVisibleHeight((int) delta + getVisibleHeight());
+        //之前这里滑动距离有偏移，是因为点击被拦截，造成滑动只在屏幕上，而没有向下传递造成的
+        int height = Math.round(delta);
+        if (height == getVisibleHeight()) return;
+        if (getVisibleHeight() >0 || delta > 0 ) {
+            setVisibleHeight(height/** + getVisibleHeight()*/);
             if (getVisibleHeight() > mMeasuredHeight) {
                 setState(PULL_STATE_ENABLE);
             } else {
@@ -95,11 +98,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 
     @Override
     public boolean releaseAction() {
-//        Log.d("Test", "releaseAction.getVisibleHeight = " + getVisibleHeight() + "  state = " + getState());
+        Log.d("Test", "releaseAction.getVisibleHeight = " + getVisibleHeight() + "  state = " + getState());
         boolean isOnRefresh = false;
         int height = getVisibleHeight();
         if (getVisibleHeight() > mMeasuredHeight) {
-//            if (mState < PULL_STATE_ENABLE) {
+//            if (mState < PULL_STATE_LOADING) {
                 setState(PULL_STATE_LOADING);
 //            } else {
 //                smoothScrollTo(mMeasuredHeight);
