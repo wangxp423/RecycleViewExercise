@@ -110,6 +110,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
             isOnRefresh = true;
         } else {
             if (getState() < PULL_STATE_LOADING){
+                setState(PULL_STATE_NONE);
                 smoothScrollTo(0);
             }
             isOnRefresh = false;

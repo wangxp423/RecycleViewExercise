@@ -304,9 +304,6 @@ public class XRecyclerView extends RecyclerView {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (!pullRefreshEnabled) return super.dispatchTouchEvent(ev);
-//        if (mLastY == -1) {
-//            mLastY = ev.getRawY();
-//        }
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 downY = ev.getRawY();
@@ -332,7 +329,6 @@ public class XRecyclerView extends RecyclerView {
                 break;
 //            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-//                mLastY = -1; // reset
                 downY = ev.getRawY();
                 if (isOnTop() && pullRefreshEnabled && appbarState == AppBarStateChangeListener.State.EXPANDED) {
                     if (mRefreshHeader.releaseAction()) {
@@ -345,46 +341,16 @@ public class XRecyclerView extends RecyclerView {
             default:
                 break;
         }
-//        if (mRefreshHeader.getState() != BaseRefreshHeader.PULL_STATE_NONE) return true;
         return super.dispatchTouchEvent(ev);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent ev) {
-//        if (mLastY == -1) {
-//            mLastY = ev.getRawY();
-//        }
-//        switch (ev.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                mLastY = ev.getRawY();
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                if (mRefreshHeader.getState() > BaseRefreshHeader.PULL_STATE_ENABLE){
-//                    return true;
-//                }
-//                final float deltaY = ev.getRawY() - mLastY;
-//                mLastY = ev.getRawY();
-//                if (isOnTop() && pullRefreshEnabled && appbarState == AppBarStateChangeListener.State.EXPANDED) {
-//                    mRefreshHeader.onMove(deltaY / DRAG_RATE);
-//                    if (mRefreshHeader.getVisibleHeight() > 0 && mRefreshHeader.getState() < ArrowRefreshHeader.PULL_STATE_ENABLE) {
-//                        return false;
-//                    }
-//                }
-//                break;
-//            default:
-//                mLastY = -1; // reset
-//                if (isOnTop() && pullRefreshEnabled && appbarState == AppBarStateChangeListener.State.EXPANDED) {
-//                    if (mRefreshHeader.releaseAction()) {
-//                        if (mLoadingListener != null) {
-//                            mLoadingListener.onRefresh();
-//                        }
-//                    }
-//                }
-//                break;
-//        }
-//        if (mRefreshHeader.getState() != BaseRefreshHeader.PULL_STATE_NONE) return true;
-//        return super.onTouchEvent(ev);
-//    }
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent e) {
+        Log.d("Test","onInterceptTouchEvent.getState = " + mRefreshHeader.getState());
+        if (mRefreshHeader.getVisibleHeight() > 0) return true;
+        return super.onInterceptTouchEvent(e);
+    }
+
 
     private int findMax(int[] lastPositions) {
         int max = lastPositions[0];

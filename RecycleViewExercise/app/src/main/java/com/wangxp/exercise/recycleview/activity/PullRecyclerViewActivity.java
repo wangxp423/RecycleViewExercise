@@ -72,7 +72,7 @@ public class PullRecyclerViewActivity extends BaseNormalActivity{
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             TextView tv = (TextView) holder.itemView.findViewById(android.R.id.text1);
             tv.setText(String.valueOf(position));
             tv.setOnClickListener(new View.OnClickListener() {
