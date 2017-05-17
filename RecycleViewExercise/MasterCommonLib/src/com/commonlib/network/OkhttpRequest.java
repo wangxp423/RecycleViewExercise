@@ -2,9 +2,7 @@ package com.commonlib.network;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
-
-import com.commonlib.util.LogUtil;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,169 +24,199 @@ import okhttp3.Response;
 public class OkhttpRequest {
     private final int CONNECTION_TIMEOUT = 10 * 1000;
     private final int READ_TIMEOUT = 15 * 1000;
-	
-	protected Handler mHandler = new Handler(Looper.getMainLooper());
-	private OkHttpClient mOkHttpClient;
-	private static final HashMap<String, Call> mRequestQue = new HashMap<String, Call>(10);
-    private HashMap<String,String> mHeaders;
-	
-	//post方式提交图片
-	private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
+
+    protected Handler mHandler = new Handler(Looper.getMainLooper());
+    private OkHttpClient mOkHttpClient;
+    private static final HashMap<String, Call> mRequestQue = new HashMap<String, Call>(10);
+    private HashMap<String, String> mHeaders;
+
+    //post方式提交图片
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
     //post方式提交String
 //    public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
     public static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("application/json; charset=utf-8");
     public static final MediaType MEDIA_TYPE_STREAM = MediaType.parse("application/octet-stream");
-    
+
     //请求回调
-    public interface HttpCallback{
-		void onHttpResponse(int tag, String response);
-		void onHttpRespFail(int tag, String error);
-	}
-    
+    public interface HttpCallback {
+        void onHttpResponse(int tag, String response);
+
+        void onHttpRespFail(int tag, String error);
+    }
+
     public OkhttpRequest() {
         getOkHttpClient();
-	}
-    
-    public OkHttpClient getOkHttpClient(){
-    	if (null == mOkHttpClient) {
-    	    OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        if (null == mOkHttpClient) {
+            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
             clientBuilder.connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
             clientBuilder.readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS);
             mOkHttpClient = clientBuilder.build();
-		}
-    	return mOkHttpClient;
+        }
+        return mOkHttpClient;
     }
-    
-    private void addQue(int tag, HttpCallback callback, Call call){
-    	Call queCall = null;
-    	if (null == callback) return;
-    	final String key = callback.hashCode() + "_" + tag;
-    	queCall = mRequestQue.get(key);
-    	if (null == queCall) {
-    		mRequestQue.put(key, call);
-		}
+
+    private void addQue(int tag, HttpCallback callback, Call call) {
+        Call queCall = null;
+        if (null == callback) return;
+        final String key = callback.hashCode() + "_" + tag;
+        queCall = mRequestQue.get(key);
+        if (null == queCall) {
+            mRequestQue.put(key, call);
+        }
     }
-    
-    private void removeQue(int tag,HttpCallback callback){
-    	Call queCall = null;
-    	if (null == callback) return;
-    	final String key = callback.hashCode() + "_" + tag;
-    	queCall = mRequestQue.get(key);
-    	if (null != queCall) {
-    		mRequestQue.remove(key);
-		}
+
+    private void removeQue(int tag, HttpCallback callback) {
+        Call queCall = null;
+        if (null == callback) return;
+        final String key = callback.hashCode() + "_" + tag;
+        queCall = mRequestQue.get(key);
+        if (null != queCall) {
+            mRequestQue.remove(key);
+        }
     }
-    
-    public static void cancel(int tag,HttpCallback callback){
-    	if (null == callback) return;
-    	final String key = callback.hashCode() + "_" + tag;
-    	Call call = mRequestQue.get(key);
-    	if(null != call) call.cancel();
+
+    public static void cancel(int tag, HttpCallback callback) {
+        if (null == callback) return;
+        final String key = callback.hashCode() + "_" + tag;
+        Call call = mRequestQue.get(key);
+        if (null != call) call.cancel();
     }
-    
-    private void excute(final int tag, final HttpCallback callback, Call call){
-    	addQue(tag, callback, call);
-    	call.enqueue(new Callback() {
-        	@Override
-        	public void onResponse(Call call, Response response) throws IOException {
-        		final int code = response.code();
-        		final String responseBody = response.body().string();
-        		LogUtil.d("OkhttpRequest", "request.onResponse() = " + responseBody);
-        		removeQue(tag, callback);
-        		call.cancel();
-        		if (200 == code){
-        			mHandler.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							callback.onHttpResponse(tag, responseBody);
-						}
-					});
-        		}else {
-        			mHandler.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							callback.onHttpRespFail(tag, "error_code: "+code);
-						}
-					});
-        		}
-        	}
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.d("OkhttpRequest", "request.onFailure()");
-            	removeQue(tag, callback);
-            	if(call.isCanceled()) return;
-            	mHandler.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						callback.onHttpRespFail(tag, "error_msg: network_error");
-					}
-				});
-            }
-        });
-    }
-    
-    private void excuteAsync(final int tag, final HttpCallback callback, Call call){
+
+    private void excute(final int tag, final HttpCallback callback, Call call) {
         addQue(tag, callback, call);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final int code = response.code();
                 final String responseBody = response.body().string();
-                LogUtil.d("OkhttpRequest", "request.onResponse() = " + responseBody);
+                Log.d("OkhttpRequest", "request.onResponse() = " + responseBody);
                 removeQue(tag, callback);
                 call.cancel();
-                if (200 == code){
-                    callback.onHttpResponse(tag, responseBody);
-                }else {
-                    callback.onHttpRespFail(tag, "error_code: "+code);
+                if (200 == code) {
+                    mHandler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            callback.onHttpResponse(tag, responseBody);
+                        }
+                    });
+                } else {
+                    mHandler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            callback.onHttpRespFail(tag, "error_code: " + code);
+                        }
+                    });
                 }
             }
+
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtil.d("OkhttpRequest", "request.onFailure()");
+                Log.d("OkhttpRequest", "request.onFailure()");
                 removeQue(tag, callback);
-                if(call.isCanceled()) return;
-                callback.onHttpRespFail(tag, "error_msg: network_error");
-                
+                if (call.isCanceled()) return;
+                mHandler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        callback.onHttpRespFail(tag, "error_msg: network_error");
+                    }
+                });
             }
         });
     }
 
-    private void setHeaders(HashMap<String,String> headers){
+    private void excuteAsync(final int tag, final HttpCallback callback, Call call) {
+        addQue(tag, callback, call);
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final int code = response.code();
+                final String responseBody = response.body().string();
+                Log.d("OkhttpRequest", "request.onResponse() = " + responseBody);
+                removeQue(tag, callback);
+                call.cancel();
+                if (200 == code) {
+                    callback.onHttpResponse(tag, responseBody);
+                } else {
+                    callback.onHttpRespFail(tag, "error_code: " + code);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("OkhttpRequest", "request.onFailure()");
+                removeQue(tag, callback);
+                if (call.isCanceled()) return;
+                callback.onHttpRespFail(tag, "error_msg: network_error");
+
+            }
+        });
+    }
+
+    public void setHeaders(HashMap<String, String> headers) {
         this.mHeaders = headers;
     }
 
-    private Request.Builder initRequestBuilder(){
+    public Request.Builder initRequestBuilder() {
         Request.Builder builder = new Request.Builder();
-        if (null != mHeaders && mHeaders.size() > 0){
+        if (null != mHeaders && mHeaders.size() > 0) {
             for (Map.Entry<String, String> iterable_element : mHeaders.entrySet()) {
-                builder.addHeader(iterable_element.getKey(),iterable_element.getValue());
+                builder.addHeader(iterable_element.getKey(), iterable_element.getValue());
             }
         }
         return builder;
     }
 
-    private Request.Builder initRequestBuilder(HashMap<String,String> headers){
+    public Request.Builder initRequestBuilder(HashMap<String, String> headers) {
         Request.Builder builder = new Request.Builder();
-        if (null != headers && headers.size() > 0){
+        if (null != headers && headers.size() > 0) {
             for (Map.Entry<String, String> iterable_element : headers.entrySet()) {
-                builder.addHeader(iterable_element.getKey(),iterable_element.getValue());
+                builder.addHeader(iterable_element.getKey(), iterable_element.getValue());
             }
         }
         return builder;
+    }
+
+    public Builder initFormBody(HashMap<String, String> params) {
+        Builder body = new FormBody.Builder();
+        if (params != null && params.size() > 0) {
+            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
+                body.add(iterable_element.getKey(), iterable_element.getValue());
+            }
+        }
+        return body;
+    }
+
+    public MultipartBody.Builder initMultipartBody(HashMap<String, String> params, HashMap<String, String> imgParams) {
+        okhttp3.MultipartBody.Builder uploadBuilder = new MultipartBody.Builder();
+        uploadBuilder.setType(MultipartBody.FORM);
+        if (params != null && params.size() > 0) {
+            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
+                uploadBuilder.addFormDataPart(iterable_element.getKey(), null, RequestBody.create(MEDIA_TYPE_MARKDOWN, iterable_element.getValue()));
+            }
+        }
+        if (imgParams != null && imgParams.size() > 0) {
+            for (Map.Entry<String, String> img_element : imgParams.entrySet()) {
+                uploadBuilder.addFormDataPart(img_element.getKey(), img_element.getValue(), RequestBody.create(MEDIA_TYPE_PNG, new File(img_element.getValue())));
+            }
+        }
+        return uploadBuilder;
     }
 
     /**
      * http get 回调至主线程
+     *
      * @param tag
      * @param url
      * @param callback
      */
     public void okHttpGet(int tag, String url, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpGet = " + url);
+        Log.d("OkhttpRequest", "Url.okHttpGet = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder();
         builder.url(url);
@@ -198,16 +226,17 @@ public class OkhttpRequest {
         excute(tag, callback, call);
 
     }
-    
+
     /**
      * http get 回调至主线程
+     *
      * @param tag
      * @param url
      * @param headers
      * @param callback
      */
-    public void okHttpGet(int tag, String url,HashMap<String,String> headers, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpGet = " + url);
+    public void okHttpGet(int tag, String url, HashMap<String, String> headers, HttpCallback callback) {
+        Log.d("OkhttpRequest", "Url.okHttpGet = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder(headers);
         builder.url(url);
@@ -220,12 +249,13 @@ public class OkhttpRequest {
 
     /**
      * http get 回调至子线程
+     *
      * @param tag
      * @param url
      * @param callback
      */
     public void okHttpAsyncGet(int tag, String url, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpAsyncGet = " + url);
+        Log.d("OkhttpRequest", "Url.okHttpAsyncGet = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder();
         builder.url(url);
@@ -233,18 +263,19 @@ public class OkhttpRequest {
         Call call = mOkHttpClient.newCall(builder.build());
         //请求加入调度
         excuteAsync(tag, callback, call);
-        
+
     }
 
     /**
      * http get 回调至子线程
+     *
      * @param tag
      * @param url
      * @param headers
      * @param callback
      */
-    public void okHttpAsyncGet(int tag, String url,HashMap<String,String> headers, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpAsyncGet = " + url);
+    public void okHttpAsyncGet(int tag, String url, HashMap<String, String> headers, HttpCallback callback) {
+        Log.d("OkhttpRequest", "Url.okHttpAsyncGet = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder(headers);
         builder.url(url);
@@ -264,16 +295,10 @@ public class OkhttpRequest {
      * @param callback
      */
     public void okHttpPost(int tag, String url, HashMap<String, String> params, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpPost = " + url);
-        Builder body = new FormBody.Builder();
-        if (params != null && params.size() > 0) {
-            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
-            	body.add(iterable_element.getKey(),iterable_element.getValue());
-            }
-        }
+        Log.d("OkhttpRequest", "Url.okHttpPost = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder();
-        builder.url(url).post(body.build());
+        builder.url(url).post(initFormBody(params).build());
         //new call
         Call call = mOkHttpClient.newCall(builder.build());
         //请求加入调度
@@ -290,17 +315,11 @@ public class OkhttpRequest {
      * @param headers
      * @param callback
      */
-    public void okHttpPost(int tag, String url, HashMap<String, String> params,HashMap<String, String> headers, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpPost = " + url);
-        Builder body = new FormBody.Builder();
-        if (params != null && params.size() > 0) {
-            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
-            	body.add(iterable_element.getKey(),iterable_element.getValue());
-            }
-        }
+    public void okHttpPost(int tag, String url, HashMap<String, String> params, HashMap<String, String> headers, HttpCallback callback) {
+        Log.d("OkhttpRequest", "Url.okHttpPost = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder(headers);
-        builder.url(url).post(body.build());
+        builder.url(url).post(initFormBody(params).build());
         //new call
         Call call = mOkHttpClient.newCall(builder.build());
         //请求加入调度
@@ -317,16 +336,10 @@ public class OkhttpRequest {
      * @param callback
      */
     public void okHttpAsyncPost(int tag, String url, HashMap<String, String> params, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpAsyncPost = " + url);
-        Builder body = new FormBody.Builder();
-        if (params != null && params.size() > 0) {
-            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
-                body.add(iterable_element.getKey(),iterable_element.getValue());
-            }
-        }
+        Log.d("OkhttpRequest", "Url.okHttpAsyncPost = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder();
-        builder.url(url).post(body.build());
+        builder.url(url).post(initFormBody(params).build());
         //new call
         Call call = mOkHttpClient.newCall(builder.build());
         //请求加入调度
@@ -343,57 +356,20 @@ public class OkhttpRequest {
      * @param headers
      * @param callback
      */
-    public void okHttpAsyncPost(int tag, String url, HashMap<String, String> params,HashMap<String, String> headers, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpAsyncPost = " + url);
-        Builder body = new FormBody.Builder();
-        if (params != null && params.size() > 0) {
-            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
-                body.add(iterable_element.getKey(),iterable_element.getValue());
-            }
-        }
+    public void okHttpAsyncPost(int tag, String url, HashMap<String, String> params, HashMap<String, String> headers, HttpCallback callback) {
+        Log.d("OkhttpRequest", "Url.okHttpAsyncPost = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder(headers);
-        builder.url(url).post(body.build());
+        builder.url(url).post(initFormBody(params).build());
         //new call
         Call call = mOkHttpClient.newCall(builder.build());
         //请求加入调度
         excuteAsync(tag, callback, call);
 
     }
-    /**
-     * http  post 上传图片  回调至主线程
-     *
-     * @param tag
-     * @param url
-     * @param params
-     * @param path
-     * @param callback
-     */
-    public void okHttpPostUploadImg(int tag, String url, HashMap<String, String> params,String path, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpPost.uploadImg = " + url);
-        okhttp3.MultipartBody.Builder uploadBuilder = new MultipartBody.Builder();
-        uploadBuilder.setType(MultipartBody.FORM);
-        if (params != null && params.size() > 0) {
-            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
-//                uploadBuilder.addFormDataPart(iterable_element.getKey(), iterable_element.getValue());
-                uploadBuilder.addFormDataPart(iterable_element.getKey(), null, RequestBody.create(MEDIA_TYPE_MARKDOWN, iterable_element.getValue()));
-            }
-        }
-        if (!TextUtils.isEmpty(path)) {
-            uploadBuilder.addFormDataPart("image", path, RequestBody.create(MEDIA_TYPE_PNG, new File(path)));
-        }
-//        uploadBuilder.addPart(RequestBody.create(MEDIA_TYPE_PNG, new File(path)));
-        //创建一个Request.Builder
-        final Request.Builder builder = initRequestBuilder();
-        builder.url(url).post(uploadBuilder.build());
-        //new call
-        Call call = mOkHttpClient.newCall(builder.build());
-        //请求加入调度
-        excute(tag, callback, call);
-    }
 
     /**
-     * http  post 多图上传  回调至主线程
+     * http  post 图片上传(单图or多图)  回调至主线程
      *
      * @param tag
      * @param url
@@ -401,22 +377,11 @@ public class OkhttpRequest {
      * @param imgParams
      * @param callback
      */
-    public void okHttpPostUploadImgs(int tag, String url, HashMap<String, String> params,HashMap<String,String> imgParams, HttpCallback callback) {
-        LogUtil.d("OkhttpRequest", "Url.okHttpPost.uploadImgs = " + url);
-        okhttp3.MultipartBody.Builder uploadBuilder = new MultipartBody.Builder();
-        if (params != null && params.size() > 0) {
-            for (Map.Entry<String, String> iterable_element : params.entrySet()) {
-                uploadBuilder.addFormDataPart(iterable_element.getKey(),null, RequestBody.create(MEDIA_TYPE_MARKDOWN,iterable_element.getValue()));
-            }
-        }
-        if (imgParams != null && imgParams.size() > 0) {
-            for (Map.Entry<String, String> img_element : imgParams.entrySet()) {
-                uploadBuilder.addFormDataPart(img_element.getKey(), img_element.getValue(), RequestBody.create(MEDIA_TYPE_PNG, new File(img_element.getValue())));
-            }
-        }
+    public void okHttpPostUploadImgs(int tag, String url, HashMap<String, String> params, HashMap<String, String> imgParams, HttpCallback callback) {
+        Log.d("OkhttpRequest", "Url.okHttpPost.uploadImgs = " + url);
         //创建一个Request.Builder
         final Request.Builder builder = initRequestBuilder();
-        builder.url(url).post(uploadBuilder.build());
+        builder.url(url).post(initMultipartBody(params, imgParams).build());
         //new call
         Call call = mOkHttpClient.newCall(builder.build());
         //请求加入调度
