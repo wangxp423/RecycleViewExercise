@@ -23,6 +23,7 @@ public class App {
         }
     }
 
-    public static void init(){}
+    public static void init() {
+    }
 
 }

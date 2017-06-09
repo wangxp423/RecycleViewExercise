@@ -27,7 +27,7 @@ import java.util.List;
 public class FileUtil {
     public static final String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-    private static final String FILE_PATH = "/deviceapp/"; //文件目录
+    private static final String FILE_PATH = "/file/"; //文件目录
     private static final String AUDIO_PATH = "/audio/"; //音频目录
     private static final String IMAGE_PATH = "/image/"; //图片目录
     private static final String PHOTO_PATH = "/photo/"; //头像目录
@@ -37,24 +37,20 @@ public class FileUtil {
      *
      * @return
      */
-    public static String getFileDir(Context context) {
+    public static File getFileDir(Context context) {
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
-            File sdFile = Environment.getExternalStorageDirectory();
-            sdFile = new File(
-                    Environment.getExternalStorageDirectory(), "Android/data/"
-                    + context.getPackageName());
+            File sdFile = context.getExternalCacheDir();
             if (!sdFile.exists()) {
                 sdFile.mkdirs();
             }
-            String path = sdFile.getAbsolutePath();
+//            String path = sdFile.getAbsolutePath();
 //            LogUtil.t("SD卡目录 = " + path);
-            return path;
+            return sdFile;
         } else {
-            String strCacheDir = context.getCacheDir()
-                    .getAbsolutePath();
+            File cacheFile = context.getCacheDir();
 //            LogUtil.t("默认缓存目录 = " + strCacheDir);
-            return strCacheDir + "/";
+            return cacheFile;
         }
     }
 
@@ -64,7 +60,7 @@ public class FileUtil {
      * @return
      */
     public static String getFilePath(Context context) {
-        String path = getFileDir(context);
+        String path = getFileDir(context).getAbsolutePath();
         path += FILE_PATH;
         File file = new File(path);
         if (!file.exists()) {
@@ -79,7 +75,7 @@ public class FileUtil {
      * @return
      */
     public static String getAudioPath(Context context) {
-        String path = getFileDir(context);
+        String path = getFileDir(context).getAbsolutePath();
         path += AUDIO_PATH;
         File file = new File(path);
         if (!file.exists()) {
@@ -94,7 +90,7 @@ public class FileUtil {
      * @return
      */
     public static String getImagePath(Context context) {
-        String path = getFileDir(context);
+        String path = getFileDir(context).getAbsolutePath();
         path += IMAGE_PATH;
         File file = new File(path);
         if (!file.exists()) {
@@ -109,7 +105,7 @@ public class FileUtil {
      * @return
      */
     public static String getPhotoPath(Context context) {
-        String path = getFileDir(context);
+        String path = getFileDir(context).getAbsolutePath();
         path += PHOTO_PATH;
         File file = new File(path);
         if (!file.exists()) {
@@ -137,7 +133,7 @@ public class FileUtil {
                 file_names.add(files[i].getName());
             }
         } else {
-            LogUtil.t("该目录没有任何文件信息！");
+            Log.d("Test", "该目录没有任何文件信息！");
         }
         return file_names;
     }
@@ -236,7 +232,7 @@ public class FileUtil {
             outWriter.flush();
             return true;
         } catch (Exception ex) {
-            LogUtil.e("FileUtil", "setCacheTextData" + ex);
+            Log.d("Test", "setCacheTextData" + ex);
             return false;
         } finally {
             try {

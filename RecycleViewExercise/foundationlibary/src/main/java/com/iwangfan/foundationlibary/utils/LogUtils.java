@@ -27,12 +27,12 @@ public class LogUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    private static boolean logSwitch      = true;
+    private static boolean logSwitch = true;
     private static boolean log2FileSwitch = false;
-    private static char    logFilter      = 'v';
-    private static String  tag            = "TAG";
-    private static String  dir            = null;
-    private static int     stackIndex     = 0;
+    private static char logFilter = 'd';
+    private static String tag = "TAG";
+    private static String dir = null;
+    private static int stackIndex = 0;
 
     /**
      * 初始化函数
@@ -45,10 +45,11 @@ public class LogUtils {
      */
     public static void init(boolean logSwitch, boolean log2FileSwitch, char logFilter, String tag) {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            dir = App.INSTANCE.getExternalCacheDir().getPath() + File.separator;
+            dir = App.INSTANCE.getExternalCacheDir().getPath() + File.separator + "log" + File.separator;
         } else {
-            dir = App.INSTANCE.getCacheDir().getPath() + File.separator;
+            dir = App.INSTANCE.getCacheDir().getPath() + File.separator + "log" + File.separator;
         }
+//        LogUtils.d("Test","LogUtils.dir = " + dir);
         LogUtils.logSwitch = logSwitch;
         LogUtils.log2FileSwitch = log2FileSwitch;
         LogUtils.logFilter = logFilter;
@@ -72,10 +73,10 @@ public class LogUtils {
 
     public static class Builder {
 
-        private boolean logSwitch      = true;
+        private boolean logSwitch = true;
         private boolean log2FileSwitch = false;
-        private char    logFilter      = 'v';
-        private String  tag            = "TAG";
+        private char logFilter = 'd';
+        private String tag = "TAG";
 
         public Builder setLogSwitch(boolean logSwitch) {
             this.logSwitch = logSwitch;

@@ -32,9 +32,9 @@ public class CrashUtils
     private UncaughtExceptionHandler mHandler;
 
     private boolean mInitialized;
-    private String  crashDir;
-    private String  versionName;
-    private int     versionCode;
+    private String crashDir;
+    private String versionName;
+    private int versionCode;
 
     private CrashUtils() {
     }

@@ -3,45 +3,39 @@ package com.iwangfan.foundationlibary.recyclerview;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-
 import java.util.List;
 
 /**
  * 公用recycler adapter
+ *
  * @param <T>
  */
-public abstract class CommonWrappterAdapter<T> extends MultiItemTypeWrapperAdapter<T>
-{
+public abstract class CommonWrappterAdapter<T> extends MultiItemTypeWrapperAdapter<T> {
     protected Context mContext;
     protected int mLayoutId;
     protected List<T> mDatas;
     protected LayoutInflater mInflater;
 
-    public CommonWrappterAdapter(final Context context, final int layoutId, List<T> datas)
-    {
+    public CommonWrappterAdapter(final Context context, final int layoutId, List<T> datas) {
         super(context, datas);
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mLayoutId = layoutId;
         mDatas = datas;
 
-        addItemViewDelegate(new ItemView<T>()
-        {
+        addItemViewDelegate(new ItemView<T>() {
             @Override
-            public int getItemViewLayoutId()
-            {
+            public int getItemViewLayoutId() {
                 return layoutId;
             }
 
             @Override
-            public boolean isForViewType( T item, int position)
-            {
+            public boolean isForViewType(T item, int position) {
                 return true;
             }
 
             @Override
-            public void convert(ViewHolder holder, T t, int position)
-            {
+            public void convert(ViewHolder holder, T t, int position) {
                 CommonWrappterAdapter.this.convert(holder, t, position);
             }
         });

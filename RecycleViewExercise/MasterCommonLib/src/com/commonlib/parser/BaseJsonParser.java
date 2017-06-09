@@ -1,17 +1,17 @@
 package com.commonlib.parser;
 
+import com.commonlib.model.BaseModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.commonlib.model.BaseModel;
 
 
 abstract public class BaseJsonParser<T extends BaseModel> {

@@ -1,7 +1,5 @@
 package com.commonlib.widget;
 
-import com.commonlib.ViewConfiguration;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.commonlib.ViewConfiguration;
 
 public class ImageViewer extends ImageView {
 

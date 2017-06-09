@@ -1,22 +1,77 @@
 ext {
     android = [
-            compileSdkVersion: 23,
+            compileSdkVersion: 25,
             buildToolsVersion: "25",
             minSdkVersion    : 14,
-            targetSdkVersion : 22
+            targetSdkVersion : 25
     ]
 
-    def supportVersion = "23.4.0"
-    def gsonVesion = "2.4"
-    def butterKnifeVersion = "8.4.0"
-    def butterKnifeCompilerVersion = "8.4.0"
+    supportLibrary = [
+            supportVersion       : "23.4.0",
+            otherLibraryVersion  : "22.2.1",
+            supportLibraryVersion: "24.2.0"
+    ]
+    androidDependencies = [ //android 兼容包
+                            recyclerView: "com.android.support:recyclerview-v7:${supportLibrary.supportVersion}",
+                            appcompat_v7: "com.android.support:appcompat-v7:${supportLibrary.supportVersion}",
+                            cardview_v7 : "com.android.support:cardview-v7:23.2.0",
+                            support_v4  : "com.android.support:support-v4:${supportLibrary.supportVersion}",
+                            design      : "com.android.support:design:${supportLibrary.supportVersion}",
+    ]
 
-    libSupportAppcompatV7 = "com.android.support:appcompat-v7:${supportVersion}"
-    libSupportDesign = "com.android.support:design:${supportVersion}"
-    libSupportRecyclerview = "com.android.support:recyclerview-v7:${supportVersion}"
-    libSupportV4 = "com.android.support:support-v4:${supportVersion}"
-    libGson = "com.google.code.gson:gson:${gsonVesion}"
-    libButterKnife = "com.jakewharton:butterknife:${butterKnifeVersion}"
-    libButterKnifeCompiler = "com.jakewharton:butterknife-compiler:${butterKnifeCompilerVersion}"
+    unitTest = [
+            robolectricVersion: 3.3,
+            mockitoVersion    : "1.9.5",
+            jUnitVersion      : 4.12
+    ]
+    JUnitDependencies = [ //单元测试 依赖
+                          junit                    : "junit:junit:${unitTest.jUnitVersion}",
+                          mockitoCore              : "org.mockito:mockito-core:${unitTest.mockitoVersion}",
+                          mockitoTestCompile       : "org.mockito:mockito-android:+",
+                          robolectric              : "org.robolectric:robolectric:${unitTest.robolectricVersion}",
+                          robolectricAnnotations   : "org.robolectric:robolectric-annotations:${unitTest.robolectricVersion}",
+                          //robolectric针对support-v4的shadows
+                          robolectricShadowSupport : "org.robolectric:shadows-support-v4:${unitTest.robolectricVersion}",
+                          robolectricShadowMultiDex: "org.robolectric:shadows-multidex:3.0",
+    ]
 
+    def retrofitVersion = "2.3.0"
+    def loggingVersion = "3.6.0"
+    retrofitDependencies = [ //retrofit 依赖
+                             retorfit       : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+                             converterGson  : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+                             converterScalar: "com.squareup.retrofit2:converter-scalars:${retrofitVersion}",
+                             adapterRxjava  : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+                             logging        : "com.squareup.okhttp3:logging-interceptor:${loggingVersion}",
+    ]
+
+    def rxVersion = "2.1.0"
+    def rxAndroidVersion = "2.0.1"
+    def fastjsonVersion = "1.1.52.android"
+    def fastjsonAdapterVersion = "2.1.0"
+    def rxbusAdapterVersion = "1.0.1"
+    def rxlifecycleVersion = "2.1.0"
+    def rxlifecycleandroidVersion = "2.0.1"
+    def rxrelayVersion = "2.0.0"
+    rxDependencies = [ //rx相关依赖
+                       rx                   : "io.reactivex.rxjava2:rxjava:${rxVersion}",
+                       rx_android           : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
+                       rxbus                : "com.kw:rxbus:${rxbusAdapterVersion}",
+                       rxlifecycle          : "com.trello.rxlifecycle2:rxlifecycle:${rxlifecycleVersion}",
+                       rxlifecycleandroid   : "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycleandroidVersion}",
+                       rxlifecycleComponents: "com.trello.rxlifecycle2:rxlifecycle-components:${rxVersion}",
+                       rxrelay2             : "com.jakewharton.rxrelay2:rxrelay:${rxrelayVersion}",
+                       fastjson             : "com.alibaba:fastjson:${fastjsonVersion}",
+                       fastjson_adapter     : "org.ligboy.retrofit2:converter-fastjson-android:${fastjsonAdapterVersion}",
+    ]
+
+    def okhttp3Version = "3.8.0"
+    def okioVersion = "1.13.0"
+    okhttpDependencies = [
+            okhttp3: "com.squareup.okhttp3:okhttp:${okhttp3Version}",
+            okio   : "com.squareup.okio:okio:${okioVersion}",
+    ]
+
+    def glideVersion = "3.7.0"
+    libGlide = "com.github.bumptech.glide:glide:${glideVersion}"
 }

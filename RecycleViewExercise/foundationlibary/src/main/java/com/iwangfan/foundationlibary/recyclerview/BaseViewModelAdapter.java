@@ -28,10 +28,10 @@ public class BaseViewModelAdapter<T> extends BaseListRecyclerAdapter<T> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         IViewModel<T> viewModel = getViewModelByIndex(viewType);
-        if (null == viewModel){
+        if (null == viewModel) {
             return null;
         } else {
-            return viewModel.onCreateViewHolder(parent,viewType);
+            return viewModel.onCreateViewHolder(parent, viewType);
         }
     }
 
@@ -40,7 +40,7 @@ public class BaseViewModelAdapter<T> extends BaseListRecyclerAdapter<T> {
         final int type = getItemViewType(position);
         IViewModel<T> viewModel = getViewModelByIndex(type);
         T model = getList().get(position);
-        if (null != viewModel) viewModel.onBindViewHolder(model,holder,position);
+        if (null != viewModel) viewModel.onBindViewHolder(model, holder, position);
     }
 
 

@@ -1,14 +1,5 @@
 package com.commonlib.util;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +10,15 @@ import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * 
  * @author: wangxp
@@ -26,7 +26,7 @@ import android.util.Log;
  * @Desc: WIFI 工具类
  */
 public class WifiUtil {
-	private static String[] WIFI_SSID = { "往返免费", "WangFan", "9797168.com", "AMOL" };
+	private static String[] WIFI_SSID = {"往返免费", "WangFan", "往返WIFI", "往返免费WIFI"};
 	public static final String ACTION_WANGFAN_WIFI_CHANGE = "ACTION_WANGFAN_WIFI_CHANGE";
 	public static final String EXTRA_IS_WANGFAN_WIFI = "EXTRA_IS_WANGFAN_WIFI";
 	

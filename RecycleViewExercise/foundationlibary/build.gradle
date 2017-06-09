@@ -18,13 +18,14 @@ android {
 }
 
 dependencies {
-    provided rootProject.ext.libSupportRecyclerview
-    compile rootProject.ext.libSupportAppcompatV7
-    provided rootProject.ext.libSupportV4
+    provided androidDependencies.recyclerView
+    compile androidDependencies.appcompat_v7
+    provided androidDependencies.design
+    provided androidDependencies.support_v4
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:23.4.0'
+
 }

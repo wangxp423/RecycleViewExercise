@@ -241,6 +241,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         view.setOnLongClickListener(listener);
         return this;
     }
+
     public interface ICloseLintener {
         void OnCloseLisnter(final ViewHolder holder, Object item, int position);
     }
@@ -248,9 +249,10 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private ICloseLintener iCloseListener;
 
     public void setOnCloseLisnter(ICloseLintener iCloseListener) {
-        this.iCloseListener=iCloseListener;
+        this.iCloseListener = iCloseListener;
     }
-    public ICloseLintener getCloseLintener(){
+
+    public ICloseLintener getCloseLintener() {
         return iCloseListener;
     }
 

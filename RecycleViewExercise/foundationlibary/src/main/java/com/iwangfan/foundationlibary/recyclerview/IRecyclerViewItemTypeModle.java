@@ -7,5 +7,6 @@ package com.iwangfan.foundationlibary.recyclerview;
 
 public interface IRecyclerViewItemTypeModle<T> {
     int getItemViewLayoutId();
+
     void onBindViewHoler(ViewHolder holder, T t, int position);
 }

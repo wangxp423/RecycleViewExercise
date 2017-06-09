@@ -1,13 +1,5 @@
 package com.commonlib.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -22,6 +14,14 @@ import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class BitmapUtil {
 
@@ -339,7 +339,7 @@ public class BitmapUtil {
 	 * @param cr ContentResolver对象
 	 * @param title Images.Media.TITLE
 	 * @param filepath 保存路径
-	 * @param bimap Bitmap对象
+	 * @param bitmap Bitmap对象
 	 * @param jpegData 图片二进制
 	 * @return 新图片的Uri
 	 */

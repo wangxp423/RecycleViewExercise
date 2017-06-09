@@ -6,9 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-import java.util.List;
-
 /**
  * Created by wuyulong on 2017/3/3.
  * RecyclerView 多类型Adapter封装
@@ -16,11 +13,14 @@ import java.util.List;
 
 public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAdapter<T> {
     protected Context mContext;
-    private final SparseArrayCompat<IRecyclerViewItemTypeModle<T>> mViewModels=new SparseArrayCompat<>();
-    private final SparseArrayCompat<String> mViewModelsConfig=new SparseArrayCompat<>();
-    public BaseRecyclerViewMultiltemTypeAdapter(Context context){
-        this.mContext=context;
+    private final SparseArrayCompat<IRecyclerViewItemTypeModle<T>> mViewModels = new SparseArrayCompat<>();
+    private final SparseArrayCompat<String> mViewModelsConfig = new SparseArrayCompat<>();
+    protected IModleListener iModleListener;
+
+    public BaseRecyclerViewMultiltemTypeAdapter(Context context) {
+        this.mContext = context;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         IRecyclerViewItemTypeModle<T> viewModel = getViewModelByIndex(viewType);
@@ -30,7 +30,8 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
         setListener(parent, holder, viewType);
         return holder;
     }
-    protected void initViewHolderParam(ViewHolder holder){
+
+    protected void initViewHolderParam(ViewHolder holder) {
 
     }
 
@@ -39,9 +40,9 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
         final int type = getItemViewType(position);
         IRecyclerViewItemTypeModle<T> viewModel = getViewModelByIndex(type);
         T model = getList().get(position);
-        if (null != viewModel&&holder instanceof ViewHolder){
-            ViewHolder mViewHolder=(ViewHolder)holder;
-            viewModel.onBindViewHoler(mViewHolder,model,position);
+        if (null != viewModel && holder instanceof ViewHolder) {
+            ViewHolder mViewHolder = (ViewHolder) holder;
+            viewModel.onBindViewHoler(mViewHolder, model, position);
         }
 
     }
@@ -50,6 +51,12 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
         if (cls == null) return;
         mViewModelsConfig.put(index, cls.getName());
     }
+
+    public void removeViewModelClass(int index) {
+        mViewModelsConfig.remove(index);
+        notifyDataSetChanged();
+    }
+
     public IRecyclerViewItemTypeModle<T> getViewModelByIndex(int index) {
         IRecyclerViewItemTypeModle<T> viewModel = mViewModels.get(index);
         if (viewModel == null) {
@@ -59,6 +66,9 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
                 Object obj = cls.newInstance();
                 if (obj instanceof IRecyclerViewItemTypeModle) {
                     viewModel = (IRecyclerViewItemTypeModle<T>) obj;
+                    if (iModleListener != null) {
+                        iModleListener.OnViewModleListener(viewModel);
+                    }
                     mViewModels.put(index, viewModel);
                 }
             } catch (ClassNotFoundException e) {
@@ -74,12 +84,14 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
 
     /**
      * 是否开启点击事件
+     *
      * @param viewType
      * @return
      */
     protected boolean isEnabled(int viewType) {
         return true;
     }
+
     protected void setListener(final ViewGroup parent, final ViewHolder viewHolder, int viewType) {
         if (!isEnabled(viewType)) return;
         viewHolder.getConvertView().setOnClickListener(new View.OnClickListener() {
@@ -87,7 +99,7 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     int position = viewHolder.getAdapterPosition();
-                    mOnItemClickListener.onItemClick(v, viewHolder , position);
+                    mOnItemClickListener.onItemClick(v, viewHolder, position);
                 }
             }
         });
@@ -102,5 +114,15 @@ public class BaseRecyclerViewMultiltemTypeAdapter<T> extends BaseListRecyclerAda
                 return false;
             }
         });
+    }
+
+    /**
+     * 设置viewmodle 监听器
+     *
+     * @param iModleListener
+     */
+    public void setViewModleListener(IModleListener iModleListener) {
+        this.iModleListener = iModleListener;
+
     }
 }

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import java.util.List;
 
 /**
@@ -37,12 +36,12 @@ public class MultiItemTypeWrapperAdapter<T> extends RecyclerView.Adapter<ViewHol
         ItemView itemView = mItemViewDelegateManager.getItemViewDelegate(viewType);
         int layoutId = itemView.getItemViewLayoutId();
         ViewHolder holder = ViewHolder.createViewHolder(mContext, parent, layoutId);
-        onViewHolderCreated(holder,holder.getConvertView());
+        onViewHolderCreated(holder, holder.getConvertView());
         setListener(parent, holder, viewType);
         return holder;
     }
 
-    public void onViewHolderCreated(ViewHolder holder,View itemView){
+    public void onViewHolderCreated(ViewHolder holder, View itemView) {
 
     }
 
@@ -62,7 +61,7 @@ public class MultiItemTypeWrapperAdapter<T> extends RecyclerView.Adapter<ViewHol
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     int position = viewHolder.getAdapterPosition();
-                    mOnItemClickListener.onItemClick(v, viewHolder , position);
+                    mOnItemClickListener.onItemClick(v, viewHolder, position);
                 }
             }
         });

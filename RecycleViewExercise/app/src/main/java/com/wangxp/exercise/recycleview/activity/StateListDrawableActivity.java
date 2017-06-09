@@ -1,7 +1,6 @@
 package com.wangxp.exercise.recycleview.activity;
 
 import android.graphics.drawable.StateListDrawable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,14 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.commonlib.util.WifiUtil;
-import com.iwangfan.foundationlibary.utils.LogUtils;
 import com.wangxp.exercise.recycleview.BaseNormalActivity;
 import com.wangxp.exercise.recycleview.R;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
 /**
  * @类描述：StateListDrawable 测试研究

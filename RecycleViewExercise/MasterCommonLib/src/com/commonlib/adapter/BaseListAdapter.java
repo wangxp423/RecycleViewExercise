@@ -1,9 +1,9 @@
 package com.commonlib.adapter;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.widget.BaseAdapter;
+
+import java.util.ArrayList;
 
 
 public abstract class BaseListAdapter<T> extends BaseAdapter {

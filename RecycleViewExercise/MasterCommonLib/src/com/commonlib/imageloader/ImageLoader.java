@@ -1,14 +1,15 @@
 package com.commonlib.imageloader;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.commonlib.widget.MultiShapeView;
 
 public class ImageLoader {
     public static final String ANDROID_RESOURCE = "android.resource://";
@@ -41,8 +42,8 @@ public class ImageLoader {
         Glide.with(context)
                 .load(url)
                 .placeholder(placeholder)
-                .crossFade()
                 .centerCrop()
+                .crossFade()
                 .into(imageView);
     }
 
@@ -59,7 +60,6 @@ public class ImageLoader {
                 .load(resourceIdToUri(context, resId))
                 .placeholder(placeholder)
                 .crossFade()
-                .centerCrop()
                 .into(imageView);
     }
 
@@ -76,7 +76,6 @@ public class ImageLoader {
                 .load(resourceIdToUri(context, resId))
                 .placeholder(placeholder)
                 .crossFade()
-                .centerCrop()
                 .into(imageView);
     }
 
@@ -93,7 +92,6 @@ public class ImageLoader {
                 .load("file://" + path)
                 .placeholder(placeholder)
                 .crossFade()
-                .centerCrop()
                 .into(imageView);
     }
 
@@ -110,7 +108,6 @@ public class ImageLoader {
                 .load("file://" + path)
                 .placeholder(placeholder)
                 .crossFade()
-                .centerCrop()
                 .into(imageView);
     }
 
@@ -127,7 +124,6 @@ public class ImageLoader {
                 .load(url)
                 .placeholder(placeholder)
                 .crossFade()
-                .centerCrop()
                 .transform(new GlideCircleTransform(context))
                 .into(imageView);
     }
@@ -145,7 +141,6 @@ public class ImageLoader {
                 .load(resourceIdToUri(context, resId))
                 .placeholder(placeholder)
                 .crossFade()
-                .centerCrop()
                 .transform(new GlideCircleTransform(context))
                 .into(imageView);
     }
@@ -164,7 +159,6 @@ public class ImageLoader {
                 .placeholder(placeholder)
                 .crossFade()
                 .transform(new GlideCircleTransform(context))
-                .centerCrop()
                 .into(imageView);
     }
 
@@ -172,7 +166,7 @@ public class ImageLoader {
         Glide.with(context)
                 .load(url)
                 .asBitmap()
-                .centerCrop()
+                .fitCenter()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
@@ -206,6 +200,34 @@ public class ImageLoader {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         imageView.setImageBitmap(resource);
+                    }
+                });
+    }
+
+    /**
+     * @param context
+     * @param url
+     * @param imageView
+     */
+    public static void setShapeViewBitmap(Context context, String url, final MultiShapeView imageView, final Drawable startPlaceHolder) {
+        Glide.with(context)
+                .load(url)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        imageView.setImageBitmap(resource);
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        imageView.setImageDrawable(startPlaceHolder);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
                     }
                 });
     }

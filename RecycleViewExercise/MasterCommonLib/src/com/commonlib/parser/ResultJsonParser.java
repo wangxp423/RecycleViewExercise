@@ -1,8 +1,8 @@
 package com.commonlib.parser;
 
-import org.json.JSONObject;
-
 import com.commonlib.model.BaseModel;
+
+import org.json.JSONObject;
 
 
 public class ResultJsonParser<T extends BaseModel> extends BaseJsonParser<T> {

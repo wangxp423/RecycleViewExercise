@@ -19,6 +19,7 @@ public class ItemViewManager<T> {
 
     /**
      * 添加一个view类型
+     *
      * @param delegate
      * @return
      */
@@ -45,6 +46,7 @@ public class ItemViewManager<T> {
 
     /**
      * 删除一个类型
+     *
      * @param delegate
      * @return
      */
@@ -62,6 +64,7 @@ public class ItemViewManager<T> {
 
     /**
      * 根据type删除
+     *
      * @param itemType
      * @return
      */

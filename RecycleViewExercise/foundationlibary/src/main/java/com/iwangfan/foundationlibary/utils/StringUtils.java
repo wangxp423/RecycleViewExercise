@@ -1,5 +1,9 @@
 package com.iwangfan.foundationlibary.utils;
 
+import android.text.TextUtils;
+
+import java.util.HashMap;
+
 /**
  * <pre>
  *     author: Blankj
@@ -170,5 +174,20 @@ public class StringUtils {
             }
         }
         return new String(chars);
+    }
+
+    public static HashMap<String, String> getQueryMap(String queryString) {
+        HashMap<String, String> map = new HashMap<>();
+        String[] kvstrs = queryString.split("&");
+        if (kvstrs != null && kvstrs.length > 0) {
+            for (String kvitem : kvstrs) {
+                if (TextUtils.isEmpty(kvitem)) continue;
+                String[] items = kvitem.split("=");
+                if (items != null && items.length > 1) {
+                    map.put(items[0], items[1]);
+                }
+            }
+        }
+        return map;
     }
 }
