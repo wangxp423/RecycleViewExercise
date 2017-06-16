@@ -40,8 +40,9 @@ dependencies {
     compile project(':foundationlibary')
     compile androidDependencies.support_v4
     compile libGlide
-    compile okhttpDependencies.okhttp3
-    compile okhttpDependencies.okio
+    compile libGreenDao
+//    compile okhttpDependencies.okhttp3
+//    compile okhttpDependencies.okio
 
     compile retrofitDependencies.retorfit
     compile retrofitDependencies.adapterRxjava
@@ -49,6 +50,10 @@ dependencies {
     compile retrofitDependencies.converterScalar
     compile rxDependencies.rx
     compile rxDependencies.rx_android
+    compile rxDependencies.rxlifecycle
+    compile rxDependencies.rxlifecycleComponents
 
-    compile 'org.greenrobot:greendao:3.2.0'
+    compile butterKnifeDependencies.butterKnife
+    compile butterKnifeDependencies.butterKnifeAnnotationProcessor
+
 }
