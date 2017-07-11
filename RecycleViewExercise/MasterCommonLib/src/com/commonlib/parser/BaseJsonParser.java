@@ -1,6 +1,6 @@
 package com.commonlib.parser;
 
-import com.commonlib.model.BaseModel;
+import com.commonlib.entity.BaseEntity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-abstract public class BaseJsonParser<T extends BaseModel> {
+abstract public class BaseJsonParser<T extends BaseEntity> {
 
 	Class<T> modelClass;
 	public BaseJsonParser (Class<T> modelClass) {

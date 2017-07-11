@@ -1,11 +1,11 @@
 package com.commonlib.parser;
 
-import com.commonlib.model.BaseModel;
+import com.commonlib.entity.BaseEntity;
 
 import org.json.JSONObject;
 
 
-public class ResultJsonParser<T extends BaseModel> extends BaseJsonParser<T> {
+public class ResultJsonParser<T extends BaseEntity> extends BaseJsonParser<T> {
 
 	public ResultJsonParser(Class<T> modelClass) {
 		super(modelClass);
